@@ -21,6 +21,9 @@ void setup()
 //    Serial.begin(9600);
     SPI.begin();
     mfrc522.PCD_Init();
+
+    pinMode(SDA, INPUT_PULLUP);
+    pinMode(SCL, INPUT_PULLUP);
     lcd.init();
 
     pinMode(GREEN_LED, OUTPUT);
