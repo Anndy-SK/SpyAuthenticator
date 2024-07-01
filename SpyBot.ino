@@ -17,10 +17,11 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);
 
 void setup()
 {
-
 //    Serial.begin(9600);
     SPI.begin();
     mfrc522.PCD_Init();
+
+    randomSeed(analogRead(0));  // inicializacia nahodneho generatora
 
     pinMode(SDA, INPUT_PULLUP);
     pinMode(SCL, INPUT_PULLUP);
@@ -54,7 +55,7 @@ void loop()
         return;
     }
 
-    // Ukaz UID na serial monitore
+    /* Ukaz UID na serial monitore
     Serial.print("UID tag :");
     String content = "";
     for (byte i = 0; i < mfrc522.uid.size; i++)
@@ -67,38 +68,65 @@ void loop()
     Serial.println();
     Serial.print("Message : ");
     content.toUpperCase();
-
-    // Nahodne udel pristup alebo zamietni True or false alebo 0 or 1
-    int accessGranted = random(3);
+*/
+    // Nahodne cislo od 1 do 100:
+    int randNumber = random(1,101);
 
     lcd.clear();
     
-    if (accessGranted == 1)
-    {
-    //    lcd.backlight();
+    if (randNumber >= 15){
         lcd.setCursor(0, 0);
-        lcd.print("PASSED");
+        lcd.print("Access Approved!");
         digitalWrite(GREEN_RELAY, HIGH);
         digitalWrite(GREEN_LED, HIGH);
-        tone(BUZZER, 1000); // Sound the buzzer at 1000 Hz
-        delay(2000);
+
+        // buzzer:
+        tone(BUZZER, 1300);
+        delay(200);
+        noTone(BUZZER); // Stop the buzzer
+        delay(20);
+
+        tone(BUZZER, 1300);
+        delay(200);
+        noTone(BUZZER); // Stop the buzzer
+        delay(50);
+
+        tone(BUZZER, 1500);
+        delay(200);
+        noTone(BUZZER); // Stop the buzzer
+        delay(30);
+
+        tone(BUZZER, 1500);
+        delay(600);
+        noTone(BUZZER); // Stop the buzzer
+        delay(200);
+
         digitalWrite(GREEN_RELAY, LOW);
         digitalWrite(GREEN_LED, LOW);
-        noTone(BUZZER); // Stop the buzzer
-        //beep 2x
-    }
-    else
-    {
-    //    lcd.backlight();
+    } else{
         lcd.setCursor(0, 0);
         lcd.print("Access Denied !");
         digitalWrite(RED_RELAY, HIGH);
         digitalWrite(RED_LED, HIGH);
-        tone(BUZZER, 500); // Sound the buzzer at 500 Hz
-        delay(2000);
+        
+        // buzzer:
+        tone(BUZZER, 2000); // Sound the buzzer at 500 Hz
+        delay(800);
+        noTone(BUZZER); // Stop the buzzer
+        delay(300);
+
+        tone(BUZZER, 2000); // Sound the buzzer at 500 Hz
+        delay(1000);
+        noTone(BUZZER); // Stop the buzzer
+        delay(300);
+
+        tone(BUZZER, 2000); // Sound the buzzer at 500 Hz
+        delay(800);
+        noTone(BUZZER); // Stop the buzzer
+        delay(100);
+        
         digitalWrite(RED_RELAY, LOW);
         digitalWrite(RED_LED, LOW);
-        noTone(BUZZER); // Stop the buzzer
     }
 
     // Reset
